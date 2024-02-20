@@ -1,6 +1,7 @@
 package com.example.consultasicenet.data
 
 import com.example.consultasicenet.network.SiceApiService
+import com.example.consultasicenet.network.SiceInfoService
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -36,8 +37,12 @@ class DefaultAppContainer : AppContainer {
     private val retrofitService: SiceApiService by lazy {
         retrofit.create(SiceApiService::class.java)
     }
+
+    private val retrofitServiceInfo : SiceInfoService by lazy {
+        retrofit.create(SiceInfoService::class.java)
+    }
     override val SiceRepository: SiceRepository by lazy {
-        NetworkSiceRepository(retrofitService)
+        NetworkSiceRepository(retrofitService,retrofitServiceInfo)
     }
 }
 
