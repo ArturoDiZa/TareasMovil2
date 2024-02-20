@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Sice</string>
+ <string name="title_activity_info_student">InfoStudent</string>
+    <string name="tipoUsuario">Enter user type</string>
+    <string name="alumno">ALUMNO</string>
+    <string name="docente">DOCENTE</string>
+</resources>
