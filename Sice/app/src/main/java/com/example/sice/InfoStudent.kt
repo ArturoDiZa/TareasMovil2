@@ -168,7 +168,7 @@ fun dataStudent(
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.Bold)
                 Text(
-                    text = "JOSE MARTIN GARCIA MARTINEZ",
+                    text = "NNOMBRE DEL ALUMNO",
                     fontSize = 21.sp,
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.Bold)
