@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
+import com.example.bluromatic.KEY_IMAGE_URI
 
 /**
  * [BlurViewModel] starts and stops the WorkManger and applies blur to the image. Also updates the
@@ -43,9 +44,10 @@ class BlurViewModel(private val bluromaticRepository: BluromaticRepository) : Vi
     //val blurUiState: StateFlow<BlurUiState> = MutableStateFlow(BlurUiState.Default)
     val blurUiState: StateFlow<BlurUiState> = bluromaticRepository.outputWorkInfo
         .map { info ->
+            val outputImageUri = info.outputData.getString(KEY_IMAGE_URI)
             when {
-                info.state.isFinished -> {
-                    BlurUiState.Complete(outputUri = "")
+                info.state.isFinished && !outputImageUri.isNullOrEmpty() -> {
+                    BlurUiState.Complete(outputUri = outputImageUri)
                 }
                 info.state == WorkInfo.State.CANCELLED -> {
                     BlurUiState.Default
@@ -65,6 +67,13 @@ class BlurViewModel(private val bluromaticRepository: BluromaticRepository) : Vi
      */
     fun applyBlur(blurLevel: Int) {
         bluromaticRepository.applyBlur(blurLevel)
+    }
+
+    /**
+     * Call method from repository to cancel any ongoing WorkRequest
+     * */
+    fun cancelWork() {
+        bluromaticRepository.cancelWork()
     }
 
     /**

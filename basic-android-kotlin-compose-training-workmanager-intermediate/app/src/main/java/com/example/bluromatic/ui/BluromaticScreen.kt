@@ -67,6 +67,8 @@ import com.example.bluromatic.data.BlurAmount
 import com.example.bluromatic.ui.theme.BluromaticTheme
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 
 @Composable
 fun BluromaticScreen(blurViewModel: BlurViewModel = viewModel(factory = BlurViewModel.Factory)) {
@@ -87,7 +89,7 @@ fun BluromaticScreen(blurViewModel: BlurViewModel = viewModel(factory = BlurView
             blurUiState = uiState,
             blurAmountOptions = blurViewModel.blurAmount,
             applyBlur = blurViewModel::applyBlur,
-            cancelWork = {},
+            cancelWork = blurViewModel::cancelWork,
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(dimensionResource(R.dimen.padding_medium))
@@ -123,7 +125,10 @@ fun BluromaticScreenContent(
         BlurActions(
             blurUiState = blurUiState,
             onStartClick = { applyBlur(selectedValue) },
-            onSeeFileClick = {},
+            // New lambda code runs when See File button is clicked
+            onSeeFileClick = { currentUri ->
+                showBlurredImage(context, currentUri)
+            },
             onCancelClick = { cancelWork() },
             modifier = Modifier.fillMaxWidth()
         )
@@ -152,6 +157,9 @@ private fun BlurActions(
             }
             is BlurUiState.Complete -> {
                 Button(onStartClick) { Text(stringResource(R.string.start)) }
+                Spacer(modifier = Modifier.width(dimensionResource(R.dimen.padding_small)))
+                FilledTonalButton({ onSeeFileClick(blurUiState.outputUri) })
+                { Text(stringResource(R.string.see_file)) }
             }
         }
 
