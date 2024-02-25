@@ -15,27 +15,27 @@ import kotlinx.coroutines.async
 
 
 class LoginView(private val alumnosRepository: AlumnosRepository):ViewModel(){
-    var matricula by mutableStateOf("")
+    var noControl by mutableStateOf("")
     var password by mutableStateOf("")
-    var errorLogin by mutableStateOf(false)
-    var expandido by mutableStateOf(false)
-    var tipoUsuario by mutableStateOf("ALUMNO")
+    var loginError by mutableStateOf(false)
+    var expand by mutableStateOf(false)
+    var userType by mutableStateOf("ALUMNO")
 
     fun updateExpandido(boolean: Boolean){
-        expandido=boolean
+        expand=boolean
     }
     fun updateTipoUsuario(string: String){
-        tipoUsuario=string
+        userType=string
     }
 
     fun updateMatricula(string: String){
-        matricula=string
+        noControl=string
     }
     fun updatePassword(string: String){
         password=string
     }
     fun updateErrorLogin(boolean: Boolean){
-        errorLogin=boolean
+        loginError=boolean
     }
 
     suspend fun getAccess(matricula: String, password: String, tipoUsuario:String): Boolean {
@@ -43,10 +43,10 @@ class LoginView(private val alumnosRepository: AlumnosRepository):ViewModel(){
     }
 
     suspend fun getInfo():String{
-        val informacion = viewModelScope.async {
+        val info = viewModelScope.async {
             alumnosRepository.getInfo()
         }
-        return informacion.await()
+        return info.await()
     }
 
     companion object {

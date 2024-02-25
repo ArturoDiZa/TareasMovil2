@@ -13,14 +13,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -31,12 +28,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -53,7 +48,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SiceTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -64,7 +58,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun loginApp(
@@ -78,7 +71,7 @@ fun loginApp(
         modifier = Modifier.padding(40.dp)
     ) {
         OutlinedTextField(
-            value = viewmodel.matricula,
+            value = viewmodel.noControl,
             label = { Text(text = "Enter your registration") },
             onValueChange = {
                 viewmodel.updateMatricula(it)
@@ -103,11 +96,11 @@ fun loginApp(
             modifier = Modifier.fillMaxWidth()
         ) {
             ExposedDropdownMenuBox(
-                expanded = viewmodel.expandido,
+                expanded = viewmodel.expand,
                 onExpandedChange = {viewmodel.updateExpandido(it)}
             ) {
                 OutlinedTextField(
-                    value = viewmodel.tipoUsuario,
+                    value = viewmodel.userType,
                     onValueChange = {},
                     readOnly = true,
                     label = { Text(stringResource(id = R.string.tipoUsuario)) },
@@ -117,8 +110,8 @@ fun loginApp(
                         .fillMaxWidth(),
                 )
                 ExposedDropdownMenu(
-                    expanded = viewmodel.expandido,
-                    onDismissRequest = { viewmodel.expandido = false })
+                    expanded = viewmodel.expand,
+                    onDismissRequest = { viewmodel.expand = false })
                 {
                     var alumno = stringResource(id = R.string.alumno)
                     var docente = stringResource(id = R.string.docente)
@@ -126,7 +119,7 @@ fun loginApp(
                         text = { Text(alumno) },
                         onClick = {
                             viewmodel.updateTipoUsuario(alumno)
-                            viewmodel.expandido=false
+                            viewmodel.expand=false
                             viewmodel.updateErrorLogin(false)
                         }
                     )
@@ -134,7 +127,7 @@ fun loginApp(
                         text = { Text(docente) },
                         onClick = {
                             viewmodel.updateTipoUsuario(docente)
-                            viewmodel.expandido=false
+                            viewmodel.expand=false
                             viewmodel.updateErrorLogin(false)
                         }
                     )
@@ -148,9 +141,9 @@ fun loginApp(
         ) {
             OutlinedButton(
                 onClick = {
-                    if (!viewmodel.matricula.equals("") && !viewmodel.password.equals("")){
+                    if (!viewmodel.noControl.equals("") && !viewmodel.password.equals("")){
                        scope.launch {
-                           if(viewmodel.getAccess(viewmodel.matricula,viewmodel.password,viewmodel.tipoUsuario)){
+                           if(viewmodel.getAccess(viewmodel.noControl,viewmodel.password,viewmodel.userType)){
                                viewmodel.updateErrorLogin(false)
                                var info=viewmodel.getInfo()
                                var encodedInfo = Uri.encode(info)
@@ -170,7 +163,7 @@ fun loginApp(
                     textAlign = TextAlign.Center)
             }
         }
-        if(viewmodel.errorLogin){
+        if(viewmodel.loginError){
             Spacer(modifier = Modifier.height(45.dp))
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

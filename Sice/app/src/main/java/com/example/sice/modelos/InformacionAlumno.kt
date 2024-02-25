@@ -1,19 +1,19 @@
 package com.example.sice.modelos
 
 data class InformacionAlumno (
-    var fechaReins:String="",
+    var reinscripcion:String="",
     var modEducativo:String="",
     var adeudo:String="",
-    var urlFoto:String="",
+    var foto:String="",
     var adeudoDescripcion:String="",
     var inscrito:Boolean=false,
-    var estatus:String="",
-    var semActual:String="",
-    var cdtosAcumulados:Int=0,
-    var cdtosActuales:Int=0,
+    var estado:String="",
+    var semestre:String="",
+    var creditosAcum:Int=0,
+    var creditosActu:Int=0,
     var especialidad:String="",
     var carrera:String="",
     var lineamiento:Int=0,
     var nombre:String="",
-    var matricula:String="",
+    var noControl:String="",
 )
