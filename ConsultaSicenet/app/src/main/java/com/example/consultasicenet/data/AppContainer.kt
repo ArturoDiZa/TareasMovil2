@@ -24,7 +24,7 @@ interface AppContainer {
 }
 
 class DefaultAppContainer : AppContainer {
-    private val baseUrl = "sicenet.surguanajuato.tecnm.mx"
+    private val baseUrl = "https://sicenet.surguanajuato.tecnm.mx/"
     private val interceptor= CookiesInterceptor()
     private val cliente = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
