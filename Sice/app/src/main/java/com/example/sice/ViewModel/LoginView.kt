@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.sice.AlumnosApplication
 import com.example.sice.data.AlumnosRepository
+import com.example.sice.modelos.Carga
 import kotlinx.coroutines.async
 
 
@@ -20,6 +21,7 @@ class LoginView(private val alumnosRepository: AlumnosRepository):ViewModel(){
     var loginError by mutableStateOf(false)
     var expand by mutableStateOf(false)
     var userType by mutableStateOf("ALUMNO")
+
 
     fun updateExpandido(boolean: Boolean){
         expand=boolean
@@ -40,6 +42,9 @@ class LoginView(private val alumnosRepository: AlumnosRepository):ViewModel(){
 
     suspend fun getAccess(matricula: String, password: String, tipoUsuario:String): Boolean {
         return alumnosRepository.getAccess(matricula, password, tipoUsuario)
+    }
+    suspend fun getCarga():String{
+        return alumnosRepository.getCarga()
     }
 
     suspend fun getInfo():String{

@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.sice.CargaAcademica
 import com.example.sice.dataStudent
 import com.example.sice.loginApp
 
@@ -25,6 +26,9 @@ fun AppNavigation(){
                 type= NavType.StringType
             })){
             dataStudent(navController,it.arguments?.getString("text"))
+        }
+        composable(route =AppScreens.CargaA.route+"{text}"){
+            CargaAcademica(navController,it.arguments?.getString("text"))
         }
 
     }

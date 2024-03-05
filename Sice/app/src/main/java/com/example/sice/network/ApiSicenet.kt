@@ -12,8 +12,7 @@ interface ApiSicenet {
     @Headers(
         "Content-Type: text/xml",
         "SOAPAction: \"http://tempuri.org/accesoLogin\"",
-        //"Cookie: .ASPXANONYMOUS=Ep4u2XmY2gEkAAAAOWQ1NzE0ZjMtNDBjZi00NjVmLWJjNDEtYmE3MTIwMmE3ZDgwq__VynMXe9_0bf2Sns0hO3CtLws1"
-    )
+        )
 
     @POST("ws/wsalumnos.asmx")
     suspend fun getAcceso(
@@ -22,4 +21,45 @@ interface ApiSicenet {
 
     @GET("ws/wsalumnos.asmx")
     suspend fun getCokies(): ResponseBody
+
+
+    //Traer la kardex
+    @Headers(
+        "Content-Type: text/xml",
+        "SOAPAction: \"http://tempuri.org/getAllKardexConPromedioByAlumno\""
+    )
+    @POST("ws/wsalumnos.asmx")
+    suspend fun getKardex(
+        @Body requestBody: RequestBody
+    ): ResponseBody
+
+    //Traer la carga academica
+    @Headers(
+        "Content-Type: text/xml",
+        "SOAPAction: \"http://tempuri.org/getCargaAcademicaByAlumno\""
+    )
+    @POST("ws/wsalumnos.asmx")
+    suspend fun getCargaAcademica(
+        @Body requestBody: RequestBody
+    ): ResponseBody
+
+    //Traer calificaciones finales
+    @Headers(
+        "Content-Type: text/xml",
+        "SOAPAction: \"http://tempuri.org/getAllCalifFinalByAlumnos\""
+    )
+    @POST("ws/wsalumnos.asmx")
+    suspend fun getCalificacionesFinales(
+        @Body requestBody: RequestBody
+    ): ResponseBody
+
+    //Traer calificaciones parciales
+    @Headers(
+        "Content-Type: text/xml",
+        "SOAPAction: \"http://tempuri.org/getCalifUnidadesByAlumno\""
+    )
+    @POST("ws/wsalumnos.asmx")
+    suspend fun getCalificacionesUnidades(
+        @Body requestBody: RequestBody
+    ): ResponseBody
 }

@@ -1,5 +1,6 @@
 package com.example.sice.data
 
+import com.example.sice.network.AlumnoCarAcad
 import com.example.sice.network.ApiSicenet
 import com.example.sice.network.AlumnoInfo
 import okhttp3.Interceptor
@@ -18,25 +19,46 @@ class DefaultAppContainer : AppContainer {
 
     private val retrofitService : ApiSicenet by lazy { retrofit.create(ApiSicenet::class.java) }
     private val retrofitServiceInfo : AlumnoInfo by lazy { retrofit.create(AlumnoInfo::class.java) }
-    override val alumnosRepository: AlumnosRepository by lazy { NetworkAlumnosRepository(retrofitService,retrofitServiceInfo) }
+    private val retrofitServicecarg : AlumnoCarAcad by lazy { retrofit.create(AlumnoCarAcad::class.java) }
+    override val alumnosRepository: AlumnosRepository by lazy { NetworkAlumnosRepository(retrofitService,retrofitServiceInfo,retrofitServicecarg) }
 }
 
 class CookiesInterceptor : Interceptor {
-    private var cookies: List<String> = emptyList()
-    fun setCookies(cookies: List<String>) { this.cookies = cookies }
+
+    // Variable para almacenar las cookies de manera persistente
+    private val cookieStore = mutableMapOf<String, String>()
+
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
-        if (cookies.isNotEmpty()) {
-            val cookiesHeader = StringBuilder()
-            for (cookie in cookies) {
-                if (cookiesHeader.isNotEmpty()) { cookiesHeader.append("; ") }
-                cookiesHeader.append(cookie)
+
+        // Agregar las cookies al encabezado de la solicitud
+        val cookiesHeader = StringBuilder()
+        for ((name, value) in cookieStore) {
+            if (cookiesHeader.isNotEmpty()) {
+                cookiesHeader.append("; ")
             }
-            request = request.newBuilder().header("Cookie", cookiesHeader.toString()).build()
+            cookiesHeader.append("$name=$value")
         }
+
+        if (cookiesHeader.isNotEmpty()) {
+            request = request.newBuilder()
+                .header("Cookie", cookiesHeader.toString())
+                .build()
+        }
+
         val response = chain.proceed(request)
+
+        // Almacenar las cookies de la respuesta para futuras solicitudes
         val receivedCookies = response.headers("Set-Cookie")
-        if (receivedCookies.isNotEmpty()) { setCookies(receivedCookies) }
+        for (cookie in receivedCookies) {
+            val parts = cookie.split(";")[0].split("=")
+            if (parts.size == 2) {
+                val name = parts[0]
+                val value = parts[1]
+                cookieStore[name] = value
+            }
+        }
+
         return response
     }
 }

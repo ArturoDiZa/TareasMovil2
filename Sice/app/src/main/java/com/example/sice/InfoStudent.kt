@@ -55,6 +55,8 @@ class InfoStudent : ComponentActivity() {
     }
 }
 
+
+
 @Composable
 fun dataStudent(
     navController: NavController,
@@ -63,22 +65,10 @@ fun dataStudent(
     val alumnoInfo=text?.split("(",")")?.get(1)?.split(",")
     Log.d("info",""+alumnoInfo)
 
-    Column (
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.padding(7.dp)
-    ){
-        Card (
-            modifier = Modifier.fillMaxSize()
-        ){
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxHeight(.91f)
-                    .fillMaxWidth()
-                    .padding(3.dp)
-            ) {
+    Column (horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = Modifier.padding(7.dp)){
+        Card (modifier = Modifier.fillMaxSize()){
+            Column(horizontalAlignment = Alignment.CenterHorizontally,verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxHeight(.91f).fillMaxWidth().padding(3.dp)) {
                 Text(
                     text = "------ ALUMNO ------",
                     fontSize = 19.sp,
@@ -89,6 +79,7 @@ fun dataStudent(
                     fontSize = 21.sp,
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.Bold)
+
                 Spacer(modifier = Modifier.height(5.dp))
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -107,12 +98,7 @@ fun dataStudent(
                 }
 
             }
-            Column (
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(3.dp)
-            ){
+            Column (horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier.fillMaxWidth().padding(3.dp)){
                 IconButton(
                     onClick = {
                         navController.popBackStack()
@@ -141,89 +127,4 @@ fun validarCampos(dato:String?):String?{
     }
 }
 
-@Preview
-@Composable
-fun dataStudent(
 
-){
-    Column (
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.padding(7.dp)
-    ){
-        Card (
-            modifier = Modifier.fillMaxSize()
-        ){
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxHeight(.91f)
-                    .fillMaxWidth()
-                    .padding(3.dp)
-            ) {
-                Text(
-                    text = "--- DATOS DEL ALUMNO ---",
-                    fontSize = 19.sp,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Bold)
-                Text(
-                    text = "NNOMBRE DEL ALUMNO",
-                    fontSize = 21.sp,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Bold)
-                Image(
-                    painter = painterResource(id = R.drawable.user),
-                    contentDescription = "",
-                    modifier = Modifier.size(120.dp))
-                Spacer(modifier = Modifier.height(5.dp))
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(text = "Fecha de reinscripción: ")
-                    Text(text = "Mod. Educativo: ")
-                    Text(text = "Adeudo: ")
-                    Text(text = "Adeudo descripción: ")
-                    Text(text = "Inscrito: ")
-                    Text(text = "Estatus: ")
-                    Text(text = "Semestre actual: ")
-                    Text(text = "Creditos acumulados: ")
-                    Text(text = "Creditos actuales: ")
-                    Text(text = "Carrera: ")
-                    Text(text = "Matricula: ")
-                }
-                Spacer(modifier = Modifier.height(30.dp))
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(text = "Especialidad: ",
-                        fontSize = 17.sp,
-                        fontFamily = FontFamily.SansSerif,
-                        fontWeight = FontWeight.Bold)
-                    Text(text = "FSHJFHJDGFHDGSFHGDFHDGF",
-                        fontSize = 13.sp,
-                        fontFamily = FontFamily.SansSerif)
-                }
-
-            }
-            Column (
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(3.dp)
-            ){
-                IconButton(
-                    onClick = {
-
-                    },
-                    modifier = Modifier.size(50.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.cancel),
-                        contentDescription = "",
-                        modifier = Modifier.size(50.dp))
-                }
-            }
-        }
-    }
-}

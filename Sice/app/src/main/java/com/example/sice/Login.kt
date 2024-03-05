@@ -147,7 +147,10 @@ fun loginApp(
                                viewmodel.updateErrorLogin(false)
                                var info=viewmodel.getInfo()
                                var encodedInfo = Uri.encode(info)
-                               navController.navigate(route = AppScreens.Info.route+encodedInfo)
+                               //navController.navigate(route = AppScreens.Info.route+encodedInfo)
+                               val carg=viewmodel.getCarga()
+                               var encodedCarg = Uri.encode(info)
+                               navController.navigate(route = AppScreens.CargaA.route+encodedCarg)
                            }else{
                                viewmodel.updateErrorLogin(true)
                            }
