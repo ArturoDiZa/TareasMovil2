@@ -80,6 +80,7 @@ fun dataStudent(
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.Bold)
 
+
                 Spacer(modifier = Modifier.height(5.dp))
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
