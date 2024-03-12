@@ -1,6 +1,11 @@
 package com.example.sms_service
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.telephony.SmsManager
+import android.telephony.TelephonyManager
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,21 +31,33 @@ class sms {
     @Composable
     fun Screensms() {
         Scaffold(
-            modifier = Modifier.fillMaxSize()){
+            modifier = Modifier.fillMaxSize()
+        ) {
             var num by remember { mutableStateOf("") }
             var messege by remember { mutableStateOf("") }
-            OutlinedTextField(value = num, onValueChange = { num = it},maxLines = 1, placeholder = { Text("Numero De telefono") })
+            OutlinedTextField(
+                value = num,
+                onValueChange = { num = it },
+                maxLines = 1,
+                placeholder = { Text("Numero De telefono") })
             Spacer(modifier = Modifier.height(25.dp))
-            OutlinedTextField(value = messege, onValueChange = { messege = it},maxLines = 1, placeholder = { Text("Cuerpo del mensaje") })
+            OutlinedTextField(
+                value = messege,
+                onValueChange = { messege = it },
+                maxLines = 1,
+                placeholder = { Text("Cuerpo del mensaje") })
             Spacer(modifier = Modifier.height(25.dp))
             OutlinedButton(onClick = { }) {
-                Text(text = "Enviar",
-                    modifier=Modifier.width(120.dp),
-                    textAlign = TextAlign.Center)
+                Text(
+                    text = "Enviar",
+                    modifier = Modifier.width(120.dp),
+                    textAlign = TextAlign.Center
+                )
             }
 
 
         }
 
     }
+
 }
