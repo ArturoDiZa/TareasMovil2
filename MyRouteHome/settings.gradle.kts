@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MyRoute"
+rootProject.name = "MyRouteApp"
 include(":app")
  
