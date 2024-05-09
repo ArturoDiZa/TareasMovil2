@@ -18,6 +18,7 @@ package net.ivanvega.milocationymapascompose.ui.location
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.text.method.Touch.onTouchEvent
 import android.util.Log
 import androidx.annotation.RequiresPermission
 import androidx.compose.animation.animateContentSize
@@ -44,6 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.CancellationTokenSource
@@ -93,45 +95,32 @@ fun CurrentLocationScreen() {
 fun CurrentLocationContent(usePreciseLocation: Boolean) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val locationClient = remember {
-        LocationServices.getFusedLocationProviderClient(context)
-    }
-
-    var singapore = remember {
-        LatLng(20.137104, -101.200620)
-    }
+    val locationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
+    var singapore = remember { LatLng(20.137104, -101.200620) }
 
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(singapore, 10f)
     }
 
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .animateContentSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
+    Column(Modifier.fillMaxWidth().animateContentSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp), horizontalAlignment = Alignment.CenterHorizontally,) {
         val markerState = rememberMarkerState(position = singapore)
 
         Box(Modifier.fillMaxSize()){
             GoogleMap(
-                modifier = Modifier.fillMaxSize(),
-                cameraPositionState = cameraPositionState
-            ) {
-                Marker(
-                    state = MarkerState(position = singapore),
-                    title = "Casa",
-                    snippet = "Marker in home"
-                )
-
+                onMapClick = {
+                             val click = OnMyLocationClickListener {  }
+                     val MyClick = it
+                    singapore = it
+                    Log.d("onMapClick ",MyClick.toString())
+                },
+                onMyLocationClick = { val MyClick = it
+                Log.d("onMyLocationClick ","MyClick")
+                //GeoPoint p = mapView.getProjection().fromPixels((int) event.getX(), (int) event.getY())
+                }, modifier = Modifier.fillMaxSize(), cameraPositionState = cameraPositionState) {
+                Marker(state = MarkerState(position = singapore), title = "Home", snippet = "Marker in home")
                 if(!markerState.position.equals(singapore)){
-                    Marker(
-                        state = MarkerState(position = markerState.position),
-                        title = "Ubicacion actual",
-                        snippet =  "Marker in current position"
-                    )
+                    Marker(state = MarkerState(position = markerState.position), title = "Ubicacion actual", snippet =  "Marker in current position")
+
                     val RouteList = remember { mutableStateOf<List<LatLng>>(emptyList()) }
                     createRoute(singapore,markerState.position){routePoints->
                         val pointsList = mutableListOf<LatLng>()
@@ -145,7 +134,7 @@ fun CurrentLocationContent(usePreciseLocation: Boolean) {
                     Polyline(points = RouteList.value)
                 }
             }
-            Row {
+            Row (modifier = Modifier.align(Alignment.BottomStart)){
                 Button(
                     onClick = {
                         //To get more accurate or fresher device location use this method
@@ -165,28 +154,36 @@ fun CurrentLocationContent(usePreciseLocation: Boolean) {
                         }
                     },
                 ) {
-                    Text(text = "Regresar a casa")
+                    Text(text = "Home")
                 }
             }
         }
-
-
     }
 }
 
-private fun createRoute(
-    startLocation: LatLng,
-    endLocation: LatLng,
-    callback: (List<Double>) -> Unit
-) {
+
+/*
+public boolean onTouchEvent(MotionEvent event, MapView mapView)
+{
+    //---when user lifts his finger---
+    if (event.getAction() == 1) {
+        GeoPoint p = mapView.getProjection().fromPixels(
+            (int) event.getX(),
+            (int) event.getY());
+        Toast.makeText(getBaseContext(),
+            p.getLatitudeE6() / 1E6 + "," +
+                    p.getLongitudeE6() /1E6 ,
+            Toast.LENGTH_SHORT).show();
+    }
+    return false;
+}
+}
+ */
+private fun createRoute(startLocation: LatLng, endLocation: LatLng, callback: (List<Double>) -> Unit) {
     val routePoints = mutableListOf<LatLng>()
     CoroutineScope(Dispatchers.IO).launch {
         val call = getRetrofit().create(ApiService::class.java)
-            .getRoute(
-                "5b3ce3597851110001cf62483965dad304464ee688452576529f19ab",
-                "${startLocation.longitude},${startLocation.latitude}",
-                "${endLocation.longitude},${endLocation.latitude}"
-            )
+            .getRoute("5b3ce3597851110001cf62483965dad304464ee688452576529f19ab", "${startLocation.longitude},${startLocation.latitude}", "${endLocation.longitude},${endLocation.latitude}")
         if (call.isSuccessful) {
             drawRoute(call.body(), routePoints)
             val pointsList = routePoints.flatMap { listOf(it.latitude, it.longitude) }
@@ -203,7 +200,7 @@ private fun drawRoute(routeResponse: RouteResponse?, routePoints: MutableList<La
         val latLng = LatLng(it[1], it[0])
         routePoints.add(latLng)
     }
-    Log.i("aris", "Drawn route points: $routePoints")
+    Log.i("ghs", "Drawn route points: $routePoints")
 }
 
 private fun getRetrofit(): Retrofit {
