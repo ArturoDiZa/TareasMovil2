@@ -6,6 +6,14 @@ plugins {
     alias(libs.plugins.sqldelight)
 }
 
+sqldelight {
+    databases {
+        create("AppDatabase") {
+            packageName.set("com.jetbrains.spacetutorial.cache")
+        }
+    }
+}
+
 kotlin {
     androidTarget {
         compilations.all {
